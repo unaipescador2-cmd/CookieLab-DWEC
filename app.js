@@ -1,7 +1,7 @@
 const formulario = document.getElementById('formulario');
 const nombreInput = document.getElementById('nombre');
-const colorInput = document.getElementById('color');
 const idiomaSelect = document.getElementById('idioma');
+const temaBtn = document.getElementById('temaBtn');
 const mensaje = document.getElementById('mensaje');
 const borrarBtn = document.getElementById('borrar');
 const contadorVisitas = document.getElementById('contadorVisitas');
@@ -9,10 +9,11 @@ const contadorVisitas = document.getElementById('contadorVisitas');
 const textos = {
   es: {
     titulo: 'CookieLab',
-    intro: 'Guarda tu nombre y color favorito en cookies.',
+    intro: 'Guarda tu nombre y tus preferencias en cookies.',
     labelNombre: 'Nombre:',
     labelColor: 'Color de fondo:',
     labelIdioma: 'Idioma:',
+    labelTema: 'Tema:',
     placeholder: 'Escribe tu nombre',
     guardar: 'Guardar',
     borrar: 'Borrar cookies',
@@ -20,17 +21,19 @@ const textos = {
     bienvenida: 'Bienvenido otra vez, ',
     errorNombre: 'Debes escribir un nombre.',
     guardado: '¡Listo! ',
-    guardadoFin: ', tu color favorito se ha guardado.',
+    guardadoFin: ' se ha guardado correctamente.',
     borradas: 'Las cookies han sido borradas.',
     visitas: 'Visitas:',
-    idioma: 'Idioma'
+    temaClaro: 'Claro',
+    temaOscuro: 'Oscuro'
   },
   en: {
     titulo: 'CookieLab',
-    intro: 'Save your name and favorite color in cookies.',
+    intro: 'Save your name and your preferences in cookies.',
     labelNombre: 'Name:',
     labelColor: 'Background color:',
     labelIdioma: 'Language:',
+    labelTema: 'Theme:',
     placeholder: 'Write your name',
     guardar: 'Save',
     borrar: 'Delete cookies',
@@ -38,10 +41,11 @@ const textos = {
     bienvenida: 'Welcome back, ',
     errorNombre: 'You must write a name.',
     guardado: 'Done! ',
-    guardadoFin: ', your favorite color has been saved.',
+    guardadoFin: ' has been saved correctly.',
     borradas: 'Cookies have been deleted.',
     visitas: 'Visits:',
-    idioma: 'Language'
+    temaClaro: 'Light',
+    temaOscuro: 'Dark'
   }
 };
 
@@ -68,6 +72,20 @@ function deleteCookie(nombre) {
   document.cookie = `${nombre}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
 }
 
+function aplicarTema(tema) {
+  const body = document.body;
+  const activo = tema === 'dark';
+
+  body.classList.toggle('dark', activo);
+  temaBtn.textContent = activo ? 'Oscuro' : 'Claro';
+
+  if (activo) {
+    body.style.backgroundColor = '#0f172a';
+  } else {
+    body.style.backgroundColor = '#f4f7fb';
+  }
+}
+
 function aplicarIdioma(idioma) {
   const t = textos[idioma] || textos.es;
 
@@ -75,8 +93,8 @@ function aplicarIdioma(idioma) {
   document.getElementById('titulo').textContent = t.titulo;
   document.getElementById('intro').textContent = t.intro;
   document.getElementById('labelNombre').textContent = t.labelNombre;
-  document.getElementById('labelColor').textContent = t.labelColor;
   document.getElementById('labelIdioma').textContent = t.labelIdioma;
+  document.getElementById('labelTema').textContent = t.labelTema;
   document.getElementById('guardarBtn').textContent = t.guardar;
   document.getElementById('borrar').textContent = t.borrar;
   nombreInput.placeholder = t.placeholder;
@@ -93,19 +111,15 @@ function aplicarIdioma(idioma) {
 
 function cargarPreferencias() {
   const nombreGuardado = getCookie('nombreUsuario');
-  const colorGuardado = getCookie('colorFondo');
   const idiomaGuardado = getCookie('idioma') || 'es';
+  const temaGuardado = getCookie('tema') || 'light';
 
   idiomaSelect.value = idiomaGuardado;
   aplicarIdioma(idiomaGuardado);
+  aplicarTema(temaGuardado);
 
   if (nombreGuardado) {
     nombreInput.value = nombreGuardado;
-  }
-
-  if (colorGuardado) {
-    colorInput.value = colorGuardado;
-    document.body.style.backgroundColor = colorGuardado;
   }
 
   const visitas = Number(getCookie('visitas') || 0) + 1;
@@ -117,8 +131,8 @@ formulario.addEventListener('submit', (event) => {
   event.preventDefault();
 
   const nombre = nombreInput.value.trim();
-  const color = colorInput.value;
   const idioma = idiomaSelect.value;
+  const tema = getCookie('tema') || 'light';
 
   if (nombre === '') {
     mensaje.textContent = textos[idioma].errorNombre;
@@ -126,10 +140,10 @@ formulario.addEventListener('submit', (event) => {
   }
 
   setCookie('nombreUsuario', nombre, 30);
-  setCookie('colorFondo', color, 30);
   setCookie('idioma', idioma, 30);
+  setCookie('tema', tema, 30);
 
-  document.body.style.backgroundColor = color;
+  aplicarTema(tema);
   aplicarIdioma(idioma);
   mensaje.textContent = `${textos[idioma].guardado}${nombre}${textos[idioma].guardadoFin}`;
 });
@@ -140,15 +154,20 @@ idiomaSelect.addEventListener('change', (event) => {
   aplicarIdioma(idioma);
 });
 
+temaBtn.addEventListener('click', () => {
+  const nuevoTema = getCookie('tema') === 'dark' ? 'light' : 'dark';
+  setCookie('tema', nuevoTema, 30);
+  aplicarTema(nuevoTema);
+});
+
 borrarBtn.addEventListener('click', () => {
   deleteCookie('nombreUsuario');
-  deleteCookie('colorFondo');
   deleteCookie('idioma');
+  deleteCookie('tema');
 
   nombreInput.value = '';
-  colorInput.value = '#f4d35e';
-  document.body.style.backgroundColor = '#f4f7fb';
   idiomaSelect.value = 'es';
+  aplicarTema('light');
   aplicarIdioma('es');
   mensaje.textContent = textos.es.borradas;
 });

@@ -10,7 +10,12 @@ body {
   font-family: Arial, sans-serif;
   background: #f4f7fb;
   color: #1f2937;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+body.dark {
+  background: #0f172a;
+  color: #e2e8f0;
 }
 
 .contenedor {
@@ -20,11 +25,21 @@ body {
   padding: 30px 24px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
   text-align: center;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+body.dark .contenedor {
+  background: #111827;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
 }
 
 h1 {
   margin-top: 0;
   color: #2563eb;
+}
+
+body.dark h1 {
+  color: #93c5fd;
 }
 
 .intro {
@@ -50,6 +65,40 @@ select {
   border-radius: 10px;
   font-size: 1rem;
   background: white;
+  color: #1f2937;
+}
+
+body.dark input,
+body.dark select {
+  background: #1f2937;
+  color: #e2e8f0;
+  border-color: #374151;
+}
+
+.tema-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.tema-toggle {
+  min-width: 78px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  border: none;
+  border-radius: 999px;
+  background: #e2e8f0;
+  color: #0f172a;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+body.dark .tema-toggle {
+  background: #334155;
+  color: #f8fafc;
 }
 
 button {
@@ -79,8 +128,14 @@ button:hover {
   color: #0f172a;
 }
 
+body.dark .contador,
+body.dark .mensaje {
+  color: #e2e8f0;
+}
+
 .mensaje {
   margin-top: 20px;
   font-weight: bold;
   min-height: 24px;
+  color: #0f172a;
 }
