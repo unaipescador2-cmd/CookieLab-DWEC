@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CookieLab</title>
+    <link rel="stylesheet" href="estilos.css" />
+  </head>
+  <body>
+    <main class="contenedor">
+      <h1 id="titulo">CookieLab</h1>
+      <p id="intro" class="intro">Guarda tu nombre y color favorito en cookies.</p>
+
+      <form id="formulario">
+        <label id="labelNombre" for="nombre">Nombre:</label>
+        <input type="text" id="nombre" maxlength="20" placeholder="Escribe tu nombre" required />
+
+        <label id="labelColor" for="color">Color de fondo:</label>
+        <input type="color" id="color" value="#f4d35e" />
+
+        <label id="labelIdioma" for="idioma">Idioma:</label>
+        <select id="idioma">
+          <option value="es">Español</option>
+          <option value="en">English</option>
+        </select>
+
+        <button id="guardarBtn" type="submit">Guardar</button>
+      </form>
+
+      <p id="contadorVisitas" class="contador">Visitas: 0</p>
+
+      <button id="borrar" class="boton-secundario" type="button">Borrar cookies</button>
+
+      <p id="mensaje" class="mensaje"></p>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

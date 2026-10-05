@@ -1,0 +1,86 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  font-family: Arial, sans-serif;
+  background: #f4f7fb;
+  color: #1f2937;
+  transition: background 0.3s ease;
+}
+
+.contenedor {
+  width: min(90%, 420px);
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 30px 24px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+h1 {
+  margin-top: 0;
+  color: #2563eb;
+}
+
+.intro {
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+}
+
+label {
+  font-weight: bold;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 1rem;
+  background: white;
+}
+
+button {
+  margin-top: 12px;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 16px;
+  background: #2563eb;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.boton-secundario {
+  background: #ef4444;
+  width: 100%;
+}
+
+.contador {
+  margin: 18px 0 10px;
+  font-weight: bold;
+  color: #0f172a;
+}
+
+.mensaje {
+  margin-top: 20px;
+  font-weight: bold;
+  min-height: 24px;
+}
