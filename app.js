@@ -3,7 +3,8 @@ const nombreInput = document.getElementById('nombre');
 const idiomaSelect = document.getElementById('idioma');
 const temaBtn = document.getElementById('temaBtn');
 const mensaje = document.getElementById('mensaje');
-const borrarBtn = document.getElementById('borrar');
+const cambiarNombreBtn = document.getElementById('cambiarNombreBtn');
+const olvidarmeBtn = document.getElementById('olvidarmeBtn');
 const contadorVisitas = document.getElementById('contadorVisitas');
 
 const textos = {
@@ -16,7 +17,8 @@ const textos = {
     labelTema: 'Tema:',
     placeholder: 'Escribe tu nombre',
     guardar: 'Guardar',
-    borrar: 'Borrar cookies',
+    cambiarNombre: 'Cambiar mi nombre',
+    olvidarme: 'Olvidarme',
     sinDatos: 'Aún no has guardado tus datos.',
     bienvenida: 'Bienvenido otra vez, ',
     errorNombre: 'Debes escribir un nombre.',
@@ -36,7 +38,8 @@ const textos = {
     labelTema: 'Theme:',
     placeholder: 'Write your name',
     guardar: 'Save',
-    borrar: 'Delete cookies',
+    cambiarNombre: 'Change my name',
+    olvidarme: 'Forget me',
     sinDatos: 'You have not saved your data yet.',
     bienvenida: 'Welcome back, ',
     errorNombre: 'You must write a name.',
@@ -69,7 +72,11 @@ function getCookie(nombre) {
 }
 
 function deleteCookie(nombre) {
-  document.cookie = `${nombre}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+  document.cookie = `${nombre}=; max-age=0; path=/`;
+}
+
+function borrarTodasCookies() {
+  ['nombreUsuario', 'idioma', 'tema', 'visitas'].forEach((nombre) => deleteCookie(nombre));
 }
 
 function aplicarTema(tema) {
@@ -96,7 +103,8 @@ function aplicarIdioma(idioma) {
   document.getElementById('labelIdioma').textContent = t.labelIdioma;
   document.getElementById('labelTema').textContent = t.labelTema;
   document.getElementById('guardarBtn').textContent = t.guardar;
-  document.getElementById('borrar').textContent = t.borrar;
+  document.getElementById('cambiarNombreBtn').textContent = t.cambiarNombre;
+  document.getElementById('olvidarmeBtn').textContent = t.olvidarme;
   nombreInput.placeholder = t.placeholder;
   contadorVisitas.textContent = `${t.visitas} ${getCookie('visitas') || 0}`;
 
@@ -160,15 +168,41 @@ temaBtn.addEventListener('click', () => {
   aplicarTema(nuevoTema);
 });
 
-borrarBtn.addEventListener('click', () => {
-  deleteCookie('nombreUsuario');
-  deleteCookie('idioma');
-  deleteCookie('tema');
+cambiarNombreBtn.addEventListener('click', () => {
+  const idioma = idiomaSelect.value || getCookie('idioma') || 'es';
+  const nombreActual = getCookie('nombreUsuario') || '';
+  const nombreNuevo = prompt('Escribe tu nuevo nombre:', nombreActual);
 
+  if (nombreNuevo === null) {
+    return;
+  }
+
+  const nombre = nombreNuevo.trim();
+
+  if (!nombre) {
+    mensaje.textContent = textos[idioma].errorNombre;
+    return;
+  }
+
+  setCookie('nombreUsuario', nombre, 30);
+  nombreInput.value = nombre;
+  aplicarIdioma(idioma);
+  mensaje.textContent = `${textos[idioma].guardado}${nombre}${textos[idioma].guardadoFin}`;
+});
+
+olvidarmeBtn.addEventListener('click', () => {
+  const confirmar = confirm('¿Seguro que quieres olvidarte de todos tus datos?');
+
+  if (!confirmar) {
+    return;
+  }
+
+  borrarTodasCookies();
   nombreInput.value = '';
   idiomaSelect.value = 'es';
   aplicarTema('light');
   aplicarIdioma('es');
+  contadorVisitas.textContent = `${textos.es.visitas} 0`;
   mensaje.textContent = textos.es.borradas;
 });
 
